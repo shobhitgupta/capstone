@@ -1,0 +1,13 @@
+version: 2.1
+orbs:
+  docker: circleci/docker@2.1.2
+jobs:
+  build:
+    docker:
+    - image: python:3.7.3-stretch
+    working_directory: ~/repo
+    steps:
+      - checkout
+      -
+
+
