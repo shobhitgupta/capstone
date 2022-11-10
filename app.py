@@ -1,5 +1,5 @@
 # to open/create a new html file in the write mode
-f = open('udacity.html', 'w')
+f = open('app/udacity.html', 'w')
 
 # the html code which will go in the file GFG.html
 html_template = """<html>
