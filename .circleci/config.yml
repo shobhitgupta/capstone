@@ -43,6 +43,8 @@ jobs:
     working_directory: ~/app
     steps:
       - checkout
+      - setup_remote_docker:
+          version: 20.10.14
       - run:
          name: build and push docker image
          command: |
