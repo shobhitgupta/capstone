@@ -37,13 +37,15 @@ jobs:
             make lint
   build_docker:
     docker:
-      -image: cimg/base:2022.06
+      # Use the same Docker base as the project
+      - image: cimg/base:2022.06
+
     working_directory: ~/app
     steps:
-      -checkout
-      -run:
-        name: build and push docker image
-          command: |
+      - checkout
+      - run:
+         name: build and push docker image
+         command: |
             docker login --username ${DOCKER_USERNAME} --password ${DOCKER_PSWD}
             docker build --tag=udacitycapstone .
             docker image ls
@@ -69,7 +71,11 @@ jobs:
 workflows:
    deployment :
      jobs:
-       - build_docker
+       - build
+       - build_docker:
+          requires :
+          - build
+
 #  deployment:
 #    jobs:
 #      - aws-eks/create-cluster:
