@@ -52,8 +52,8 @@ jobs:
             docker login --username ${DOCKER_USERNAME} --password ${DOCKER_PSWD}
             docker build --tag=udacitycapstone .
             docker image ls
-            docker tag udacitycapstone shobhitgupta/udacitycapstone
-            docker push shobhitgupta/udacitycapstone
+            docker tag udacitycapstone shobhitgupta1982/udacitycapstone
+            docker push shobhitgupta1982/udacitycapstone
   test-cluster:
     docker:
       - image: 'cimg/python:3.10'
