@@ -53,7 +53,7 @@ jobs:
           command: |
             kubectl get services
           name: Test cluster
- workflows:
+workflows:
    deployment :
      jobs:
        - build
