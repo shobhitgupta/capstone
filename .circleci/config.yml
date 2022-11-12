@@ -35,7 +35,20 @@ jobs:
           command: |
             . venv/bin/activate
             make lint
-
+  build_docker:
+    docker:
+      -image: cimg/base:2022.06
+    working_directory: ~/app
+    steps:
+      -checkout
+      -run:
+        name: build and push docker image
+          command: |
+            docker login --username ${DOCKER_USERNAME} --password ${DOCKER_PSWD}
+            docker build --tag=udacitycapstone .
+            docker image ls
+            docker tag udacitycapstone shobhitgupta/udacitycapstone
+            docker push shobhitgupta/udacitycapstone
   test-cluster:
     docker:
       - image: 'cimg/python:3.10'
@@ -56,7 +69,7 @@ jobs:
 workflows:
    deployment :
      jobs:
-       - build
+       - build_docker
 #  deployment:
 #    jobs:
 #      - aws-eks/create-cluster:
