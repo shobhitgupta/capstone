@@ -86,11 +86,10 @@ jobs:
           cluster-name: << parameters.cluster-name >>
           install-kubectl: true
       - kubernetes/create-or-update-resource:
-          get-rollout-status: true
           resource-file-path: deployment.yml
-          resource-name: deployments/udacity-capstone
+          resource-name: deployments/udacitycapstone
       - kubernetes/create-or-update-resource:
-          resource-file-path: app-service.yml
+          resource-file-path: service.yml
 workflows:
   deployment:
     jobs:
