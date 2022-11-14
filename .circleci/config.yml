@@ -99,8 +99,12 @@ workflows:
       #     cluster-name: udacity-capstone
       #     requires:
       #       - aws-eks/create-cluster
-      - create-deployment:
+      - aws-eks/delete-cluster:
           cluster-name: udacity-capstone
+#           requires:
+# #            - test-cluster
+      # - create-deployment:
+      #     cluster-name: udacity-capstone
 #      - aws-eks/delete-cluster:
 #          cluster-name: udacity-capstone
 #          requires:
