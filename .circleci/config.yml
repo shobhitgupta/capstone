@@ -87,10 +87,10 @@ jobs:
           install-kubectl: true
       - kubernetes/create-or-update-resource:
           get-rollout-status: true
-          resource-file-path: deployment.yaml
-          resource-name: deployments/mycapstone1
+          resource-file-path: deployment.yml
+          resource-name: deployments/udacity-capstone
       - kubernetes/create-or-update-resource:
-          resource-file-path: deployments/app-service.yaml
+          resource-file-path: app-service.yml
 workflows:
   deployment:
     jobs:
