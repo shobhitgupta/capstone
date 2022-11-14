@@ -73,7 +73,8 @@ jobs:
           name: Test cluster
 
   create-deployment:
-    executor: aws-eks/python3
+    docker:
+      - image: circleci/python:3.7.3-stretch
     parameters:
       cluster-name:
         description: |
@@ -91,7 +92,6 @@ jobs:
       - kubernetes/create-or-update-resource:
           resource-file-path: deployments/app-service.yaml
 workflows:
-
   deployment:
     jobs:
       - aws-eks/create-cluster:
@@ -106,4 +106,4 @@ workflows:
 #          cluster-name: udacity-capstone
 #          requires:
 #            - test-cluster
-     -
+     
