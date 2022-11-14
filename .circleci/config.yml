@@ -93,16 +93,26 @@ jobs:
 workflows:
   deployment:
     jobs:
-      # - aws-eks/create-cluster:
-      #     cluster-name: udacity-capstone
-      # - test-cluster:
-      #     cluster-name: udacity-capstone
-      #     requires:
-      #       - aws-eks/create-cluster
-      - aws-eks/delete-cluster:
+      - build
+      - build_docker:
+         requires:
+          - build
+      - aws-eks/create-cluster:
           cluster-name: udacity-capstone
-#           requires:
-# #            - test-cluster
+          requires:
+            - build_docker
+      - test-cluster:
+          cluster-name: udacity-capstone
+          requires:
+            - aws-eks/create-cluster
+      - create-deployment:
+          cluster-name: udacity-capstone
+          requires:
+            - test-cluster
+#       - aws-eks/delete-cluster:
+#           cluster-name: udacity-capstone
+# #           requires:
+# # #            - test-cluster
       # - create-deployment:
       #     cluster-name: udacity-capstone
 #      - aws-eks/delete-cluster:
