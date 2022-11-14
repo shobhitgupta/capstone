@@ -71,23 +71,39 @@ jobs:
           command: |
             kubectl get services
           name: Test cluster
-workflows:
-   deployment :
-     jobs:
-       - build
-       - build_docker:
-          requires :
-          - build
 
-#  deployment:
-#    jobs:
-#      - aws-eks/create-cluster:
-#          cluster-name: udacity-capstone
-#      - test-cluster:
-#          cluster-name: udacity-capstone
-#          requires:
-#            - aws-eks/create-cluster
+  create-deployment:
+    executor: aws-eks/python3
+    parameters:
+      cluster-name:
+        description: |
+          Name of the EKS cluster
+        type: string
+    steps:
+      - checkout
+      - aws-eks/update-kubeconfig-with-authenticator:
+          cluster-name: << parameters.cluster-name >>
+          install-kubectl: true
+      - kubernetes/create-or-update-resource:
+          get-rollout-status: true
+          resource-file-path: deployment.yaml
+          resource-name: deployments/mycapstone1
+      - kubernetes/create-or-update-resource:
+          resource-file-path: deployments/app-service.yaml
+workflows:
+
+  deployment:
+    jobs:
+      - aws-eks/create-cluster:
+          cluster-name: udacity-capstone
+      - test-cluster:
+          cluster-name: udacity-capstone
+          requires:
+            - aws-eks/create-cluster
+      - create-deployment:
+          cluster-name: udacity-capstone
 #      - aws-eks/delete-cluster:
 #          cluster-name: udacity-capstone
 #          requires:
 #            - test-cluster
+     -

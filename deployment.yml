@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: udacitycapstone
+  labels:
+    app: udacitycapstone
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: udacitycapstone
+  template:
+    metadata:
+      labels:
+        app: udacitycapstone
+        role: rolling-update
+    spec:
+      containers:
+        - name: udacitycapstone
+          image: shobhitgupta1982/udacitycapstone
+          imagePullPolicy: "Always"
+          ports:
+            - containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
