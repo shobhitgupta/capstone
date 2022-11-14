@@ -55,7 +55,9 @@ jobs:
             docker tag udacitycapstone shobhitgupta1982/udacitycapstone
             docker push shobhitgupta1982/udacitycapstone
   test-cluster:
-      executor: aws-eks/python3
+      docker:
+      # Use the same Docker base as the project
+      - image: cimg/base:2022.06
       parameters:
         cluster-name:
           description: |
@@ -77,7 +79,8 @@ jobs:
             name: Test cluster
   create-deployment:
     docker:
-      - image: circleci/python:3.7.3-stretch
+      # Use the same Docker base as the project
+      - image: cimg/base:2022.06
     parameters:
       cluster-name:
         description: |
@@ -98,20 +101,22 @@ workflows:
     jobs:
       # - aws-eks/delete-cluster:
       #     cluster-name: udacity-capstone
-      # - build
-      # - build_docker:
-      #    requires:
-      #     - build
-      # - aws-eks/create-cluster:
-      #     cluster-name: udacity-capstone
-      #     requires:
-      #       - build_docker
-      # - test-cluster:
-      #     cluster-name: udacity-capstone
-      #     requires:
-      #       - aws-eks/create-cluster
-       - create-deployment:
-          cluster-name: udacity-capstone
+      - build
+      - build_docker:
+         requires:
+          - build
+      - aws-eks/create-cluster:
+          cluster-name: udacity-capstone1
+          requires:
+            - build_docker
+      - test-cluster:
+          cluster-name: udacity-capstone1
+          requires:
+            - aws-eks/create-cluster
+      - create-deployment:
+          cluster-name: udacity-capstone1
+          requires:
+            - test-cluster
           
 #       - aws-eks/delete-cluster:
 #           cluster-name: udacity-capstone
