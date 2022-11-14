@@ -89,7 +89,7 @@ jobs:
           resource-file-path: deployment.yml
           resource-name: deployments/udacitycapstone
       - kubernetes/create-or-update-resource:
-          resource-file-path: app-service.yml
+          resource-file-path: service.yml
 workflows:
   deployment:
     jobs:
