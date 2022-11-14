@@ -55,28 +55,22 @@ jobs:
             docker tag udacitycapstone shobhitgupta1982/udacitycapstone
             docker push shobhitgupta1982/udacitycapstone
   test-cluster:
-      docker:
-      # Use the same Docker base as the project
-      - image: cimg/base:2022.06
-      parameters:
-        cluster-name:
-          description: |
-            Name of the EKS cluster
-          type: string
-      steps:
-        - kubernetes/install
-        - aws-eks/update-kubeconfig-with-authenticator:
-            cluster-name: << parameters.cluster-name >>
-        - run:
-            command: |
-              echo "testing cluster"
-              kubectl get services
-              kubectl get pods
-              kubectl describe pods
-              kubectl get nodes
-              kubectl get deployment
-              kubectl get services -o wide
-            name: Test cluster
+    docker:
+      - image: 'cimg/python:3.10'
+    parameters:
+      cluster-name:
+        description: |
+          Name of the EKS cluster
+        type: string
+    steps:
+      - kubernetes/install:
+          kubectl-version: v1.22.0
+      - aws-eks/update-kubeconfig-with-authenticator:
+          cluster-name: << parameters.cluster-name >>
+      - run:
+          command: |
+            kubectl get services
+          name: Test cluster
   create-deployment:
     docker:
       # Use the same Docker base as the project
@@ -101,31 +95,21 @@ workflows:
     jobs:
       # - aws-eks/delete-cluster:
       #     cluster-name: udacity-capstone
-      - build
-      - build_docker:
-         requires:
-          - build
-      - aws-eks/create-cluster:
-          cluster-name: udacity-capstone1
-          requires:
-            - build_docker
+#      - build
+#      - build_docker:
+#         requires:
+#          - build
+#      - aws-eks/create-cluster:
+#          cluster-name: udacity-capstone1
+#          requires:
+#            - build_docker
       - test-cluster:
           cluster-name: udacity-capstone1
-          requires:
-            - aws-eks/create-cluster
-      - create-deployment:
-          cluster-name: udacity-capstone1
-          requires:
-            - test-cluster
-          
-#       - aws-eks/delete-cluster:
-#           cluster-name: udacity-capstone
-# #           requires:
-# # #            - test-cluster
-      # - create-deployment:
-      #     cluster-name: udacity-capstone
-#      - aws-eks/delete-cluster:
-#          cluster-name: udacity-capstone
+#          requires:
+#            - aws-eks/create-cluster
+#      - create-deployment:
+#          cluster-name: udacity-capstone1
 #          requires:
 #            - test-cluster
+
      
