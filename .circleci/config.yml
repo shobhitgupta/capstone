@@ -55,23 +55,26 @@ jobs:
             docker tag udacitycapstone shobhitgupta1982/udacitycapstone
             docker push shobhitgupta1982/udacitycapstone
   test-cluster:
-    docker:
-      - image: 'cimg/python:3.10'
-    parameters:
-      cluster-name:
-        description: |
-          Name of the EKS cluster
-        type: string
-    steps:
-      - kubernetes/install:
-          kubectl-version: v1.22.0
-      - aws-eks/update-kubeconfig-with-authenticator:
-          cluster-name: << parameters.cluster-name >>
-      - run:
-          command: |
-            kubectl get services
-          name: Test cluster
-
+      executor: aws-eks/python3
+      parameters:
+        cluster-name:
+          description: |
+            Name of the EKS cluster
+          type: string
+      steps:
+        - kubernetes/install
+        - aws-eks/update-kubeconfig-with-authenticator:
+            cluster-name: << parameters.cluster-name >>
+        - run:
+            command: |
+              echo "testing cluster"
+              kubectl get services
+              kubectl get pods
+              kubectl describe pods
+              kubectl get nodes
+              kubectl get deployment
+              kubectl get services -o wide
+            name: Test cluster
   create-deployment:
     docker:
       - image: circleci/python:3.7.3-stretch
@@ -93,8 +96,8 @@ jobs:
 workflows:
   deployment:
     jobs:
-      - aws-eks/delete-cluster:
-          cluster-name: udacity-capstone
+      # - aws-eks/delete-cluster:
+      #     cluster-name: udacity-capstone
       # - build
       # - build_docker:
       #    requires:
@@ -107,8 +110,8 @@ workflows:
       #     cluster-name: udacity-capstone
       #     requires:
       #       - aws-eks/create-cluster
-      #  - create-deployment:
-      #     cluster-name: udacity-capstone
+       - create-deployment:
+          cluster-name: udacity-capstone
           
 #       - aws-eks/delete-cluster:
 #           cluster-name: udacity-capstone
