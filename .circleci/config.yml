@@ -72,6 +72,7 @@ jobs:
             kubectl get services
           name: Test cluster
   create-deployment:
+    executor: aws-eks/python3
     docker:
       # Use the same Docker base as the project
       - image: cimg/base:2022.06
@@ -90,6 +91,7 @@ jobs:
           resource-name: deployments/udacitycapstone
       - kubernetes/create-or-update-resource:
           resource-file-path: service.yml
+          get-rollout-status: true
 workflows:
   deployment:
     jobs:
@@ -103,12 +105,12 @@ workflows:
 #          cluster-name: udacity-capstone1
 #          requires:
 #            - build_docker
-      - test-cluster:
-          cluster-name: udacity-capstone1
+      # - test-cluster:
+      #     cluster-name: udacity-capstone1
 #          requires:
 #            - aws-eks/create-cluster
-#      - create-deployment:
-#          cluster-name: udacity-capstone1
+     - create-deployment:
+         cluster-name: udacity-capstone1
 #          requires:
 #            - test-cluster
 
