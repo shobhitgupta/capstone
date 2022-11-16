@@ -138,12 +138,14 @@ workflows:
       - build_docker:
          requires:
           - build
-      - aws-eks/create-cluster:
-          cluster-name: udacity-capstone1
-          requires:
-            - build_docker
+      # - aws-eks/create-cluster:
+      #     cluster-name: udacity-capstone1
+      #     requires:
+      #       - build_docker
       - create-cluster:
            cluster-name: udacity-capstone1
+           requires:
+            - build_docker
       - test-cluster:
           cluster-name: udacity-capstone1
           requires:
