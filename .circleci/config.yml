@@ -103,9 +103,7 @@ jobs:
       - aws-eks/update-kubeconfig-with-authenticator:
            cluster-name: << parameters.cluster-name >>
            aws-region: ${AWS_REGION}
-           - run:
-                command: echo AWS_REGION is ${AWS_REGION} and AWS_DEFAULT_REGION is ${AWS_DEFAULT_REGION}"
-                when: on_fail
+                
       - run:
           command: |
             kubectl get services
@@ -125,9 +123,6 @@ jobs:
           cluster-name: << parameters.cluster-name >>
           aws-region: ${AWS_REGION}
           install-kubectl: true
-          - run:
-             command: echo AWS_REGION is ${AWS_REGION} and AWS_DEFAULT_REGION is ${AWS_DEFAULT_REGION}"
-             when: on_fail
       - kubernetes/create-or-update-resource:
           resource-file-path: deployment.yml
           resource-name: deployments/udacitycapstone
