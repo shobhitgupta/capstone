@@ -128,31 +128,31 @@ jobs:
           resource-name: deployments/udacitycapstone
       - kubernetes/create-or-update-resource:
           resource-file-path: service.yml
-          get-rollout-status: true
+          get-rollout-status: false
 workflows:
   deployment:
     jobs:
 #      - aws-eks/delete-cluster:
 #           cluster-name: udacity-capstone
-      - build
-      - build_docker:
-         requires:
-          - build
-      # - aws-eks/create-cluster:
-      #     cluster-name: udacity-capstone1
-      #     requires:
-      #       - build_docker
-      - create-cluster:
-           cluster-name: udacity-capstone1
-           requires:
-            - build_docker
-      - test-cluster:
+#      - build
+#      - build_docker:
+#         requires:
+#          - build
+#      # - aws-eks/create-cluster:
+#      #     cluster-name: udacity-capstone1
+#      #     requires:
+#      #       - build_docker
+#      - create-cluster:
+#           cluster-name: udacity-capstone1
+#           requires:
+#            - build_docker
+#      - test-cluster:
+#          cluster-name: udacity-capstone1
+#          requires:
+#            - create-cluster
+     - create-deployment:
           cluster-name: udacity-capstone1
-          requires:
-            - create-cluster
-      - create-deployment:
-          cluster-name: udacity-capstone1
-          requires:
-            - test-cluster
+#          requires:
+#            - test-cluster
 
      
