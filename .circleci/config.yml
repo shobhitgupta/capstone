@@ -102,6 +102,10 @@ jobs:
           kubectl-version: v1.22.0
       - aws-eks/update-kubeconfig-with-authenticator:
            cluster-name: << parameters.cluster-name >>
+           aws-region: ${AWS_REGION}
+           - run:
+                command: echo AWS_REGION is ${AWS_REGION} and AWS_DEFAULT_REGION is ${AWS_DEFAULT_REGION}"
+                when: on_fail
       - run:
           command: |
             kubectl get services
@@ -119,7 +123,11 @@ jobs:
       - checkout
       - aws-eks/update-kubeconfig-with-authenticator:
           cluster-name: << parameters.cluster-name >>
+          aws-region: ${AWS_REGION}
           install-kubectl: true
+          - run:
+             command: echo AWS_REGION is ${AWS_REGION} and AWS_DEFAULT_REGION is ${AWS_DEFAULT_REGION}"
+             when: on_fail
       - kubernetes/create-or-update-resource:
           resource-file-path: deployment.yml
           resource-name: deployments/udacitycapstone
@@ -129,25 +137,25 @@ jobs:
 workflows:
   deployment:
     jobs:
-      # - aws-eks/delete-cluster:
-      #     cluster-name: udacity-capstone
-#      - build
-#      - build_docker:
-#         requires:
-#          - build
-#      - aws-eks/create-cluster:
-#          cluster-name: udacity-capstone1
-#          requires:
-#            - build_docker
+#      - aws-eks/delete-cluster:
+#           cluster-name: udacity-capstone
+      - build
+      - build_docker:
+         requires:
+          - build
+      - aws-eks/create-cluster:
+          cluster-name: udacity-capstone1
+          requires:
+            - build_docker
       - create-cluster:
            cluster-name: udacity-capstone1
       - test-cluster:
           cluster-name: udacity-capstone1
           requires:
             - create-cluster
-    #  - create-deployment:
-    #      cluster-name: udacity-capstone1
-#          requires:
-#            - test-cluster
+      - create-deployment:
+          cluster-name: udacity-capstone1
+          requires:
+            - test-cluster
 
      
